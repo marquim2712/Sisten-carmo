@@ -44,13 +44,13 @@ export const Login = () => {
   return (
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-muted via-background to-muted p-4">
       <Card className="w-full max-w-md shadow-card">
-        <CardHeader className="text-center space-y-4">
-          <div className="mx-auto w-12 h-12 bg-gradient-to-br from-primary to-primary-glow rounded-lg flex items-center justify-center">
-            <Shield className="w-6 h-6 text-primary-foreground" />
+        <CardHeader className="text-center space-y-3 sm:space-y-4">
+          <div className="mx-auto w-10 h-10 sm:w-12 sm:h-12 bg-gradient-to-br from-primary to-primary-glow rounded-lg flex items-center justify-center">
+            <Shield className="w-5 h-5 sm:w-6 sm:h-6 text-primary-foreground" />
           </div>
           <div>
-            <CardTitle className="text-2xl font-bold">Sistema de Assistência Técnica</CardTitle>
-            <CardDescription className="mt-2">
+            <CardTitle className="text-xl sm:text-2xl font-bold">Sistema de Assistência Técnica</CardTitle>
+            <CardDescription className="mt-2 text-sm sm:text-base">
               Faça login para acessar o sistema
             </CardDescription>
           </div>
@@ -67,6 +67,7 @@ export const Login = () => {
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 disabled={isLoading}
+                className="h-10 sm:h-11"
               />
             </div>
             
@@ -79,12 +80,13 @@ export const Login = () => {
                 value={senha}
                 onChange={(e) => setSenha(e.target.value)}
                 disabled={isLoading}
+                className="h-10 sm:h-11"
               />
             </div>
             
             <Button 
               type="submit" 
-              className="w-full" 
+              className="w-full h-10 sm:h-11" 
               disabled={isLoading}
             >
               {isLoading ? (

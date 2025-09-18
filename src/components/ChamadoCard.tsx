@@ -70,26 +70,30 @@ export const ChamadoCard = ({ chamado, onEdit, onDelete, onStatusChange }: Chama
 
   return (
     <Card className="shadow-card hover:shadow-lg transition-shadow duration-200">
-      <CardHeader className="pb-3">
+      <CardHeader className="pb-2 sm:pb-3">
         <div className="flex items-start justify-between">
-          <div className="space-y-2">
+          <div className="space-y-1 sm:space-y-2 flex-1 min-w-0">
             <div className="flex items-center gap-2">
-              <User className="w-4 h-4 text-muted-foreground" />
-              <span className="font-semibold text-foreground">{chamado.cliente_nome}</span>
+              <User className="w-4 h-4 text-muted-foreground flex-shrink-0" />
+              <span className="font-semibold text-foreground truncate">{chamado.cliente_nome}</span>
             </div>
-            <Badge className={getStatusColor(chamado.status)}>
+            <Badge className={`${getStatusColor(chamado.status)} text-xs`}>
               {getStatusIcon(chamado.status)}
-              <span className="ml-1">{STATUS_LABELS[chamado.status]}</span>
+              <span className="ml-1 hidden sm:inline">{STATUS_LABELS[chamado.status]}</span>
+              <span className="ml-1 sm:hidden">
+                {chamado.status === 'aberto' ? 'Aberto' : 
+                 chamado.status === 'em_andamento' ? 'Andamento' : 'Concluído'}
+              </span>
             </Badge>
           </div>
           
           {isAdmin && (
-            <div className="flex gap-1">
+            <div className="flex gap-1 ml-2">
               <Button
                 variant="ghost"
                 size="icon"
                 onClick={() => onEdit?.(chamado)}
-                className="h-8 w-8 hover:bg-muted"
+                className="h-7 w-7 sm:h-8 sm:w-8 hover:bg-muted"
               >
                 <Edit className="w-3 h-3" />
               </Button>
@@ -97,7 +101,7 @@ export const ChamadoCard = ({ chamado, onEdit, onDelete, onStatusChange }: Chama
                 variant="ghost"
                 size="icon"
                 onClick={() => onDelete?.(chamado.id)}
-                className="h-8 w-8 hover:bg-destructive/10 hover:text-destructive"
+                className="h-7 w-7 sm:h-8 sm:w-8 hover:bg-destructive/10 hover:text-destructive"
               >
                 <Trash2 className="w-3 h-3" />
               </Button>
@@ -106,20 +110,20 @@ export const ChamadoCard = ({ chamado, onEdit, onDelete, onStatusChange }: Chama
         </div>
       </CardHeader>
 
-      <CardContent className="space-y-4">
+      <CardContent className="space-y-3 sm:space-y-4">
         <div className="space-y-2">
           <div className="flex items-start gap-2">
             <MapPin className="w-4 h-4 text-muted-foreground mt-0.5 flex-shrink-0" />
-            <span className="text-sm text-muted-foreground">{chamado.endereco}</span>
+            <span className="text-sm text-muted-foreground leading-relaxed">{chamado.endereco}</span>
           </div>
           
-          <div className="text-sm leading-relaxed">{chamado.descricao}</div>
+          <div className="text-sm leading-relaxed line-clamp-3">{chamado.descricao}</div>
         </div>
 
-        <div className="flex items-center justify-between pt-2 border-t">
+        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 pt-2 border-t">
           <div className="flex items-center gap-2 text-xs text-muted-foreground">
-            <Calendar className="w-3 h-3" />
-            <span>Criado em {formatDate(chamado.criado_em)}</span>
+            <Calendar className="w-3 h-3 flex-shrink-0" />
+            <span className="truncate">Criado em {formatDate(chamado.criado_em)}</span>
           </div>
 
           {isAdmin && nextStatus && onStatusChange && (
@@ -127,10 +131,13 @@ export const ChamadoCard = ({ chamado, onEdit, onDelete, onStatusChange }: Chama
               size="sm"
               variant="outline"
               onClick={() => onStatusChange(chamado.id, nextStatus)}
-              className="text-xs"
+              className="text-xs h-8 w-full sm:w-auto"
             >
               <ArrowRight className="w-3 h-3 mr-1" />
-              {STATUS_LABELS[nextStatus]}
+              <span className="hidden sm:inline">{STATUS_LABELS[nextStatus]}</span>
+              <span className="sm:hidden">
+                {nextStatus === 'em_andamento' ? 'Iniciar' : 'Concluir'}
+              </span>
             </Button>
           )}
         </div>

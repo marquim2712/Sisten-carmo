@@ -68,14 +68,14 @@ export const ChamadoForm = ({ isOpen, onClose, onSubmit, chamado }: ChamadoFormP
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogContent className="sm:max-w-[500px]">
-        <DialogHeader>
-          <DialogTitle>
+      <DialogContent className="w-[95vw] max-w-[500px] h-[90vh] sm:h-auto max-h-[90vh] sm:max-h-[80vh] flex flex-col">
+        <DialogHeader className="flex-shrink-0">
+          <DialogTitle className="text-lg sm:text-xl">
             {chamado ? 'Editar Chamado' : 'Novo Chamado'}
           </DialogTitle>
         </DialogHeader>
 
-        <form onSubmit={handleSubmit} className="space-y-4">
+        <form onSubmit={handleSubmit} className="space-y-4 flex-1 overflow-y-auto">
           <div className="space-y-2">
             <Label htmlFor="cliente_nome">Nome do Cliente *</Label>
             <Input
@@ -83,6 +83,7 @@ export const ChamadoForm = ({ isOpen, onClose, onSubmit, chamado }: ChamadoFormP
               value={formData.cliente_nome}
               onChange={(e) => handleChange('cliente_nome', e.target.value)}
               placeholder="Digite o nome do cliente"
+              className="h-10 sm:h-11"
             />
           </div>
 
@@ -93,6 +94,7 @@ export const ChamadoForm = ({ isOpen, onClose, onSubmit, chamado }: ChamadoFormP
               value={formData.endereco}
               onChange={(e) => handleChange('endereco', e.target.value)}
               placeholder="Digite o endereço completo"
+              className="h-10 sm:h-11"
             />
           </div>
 
@@ -104,18 +106,19 @@ export const ChamadoForm = ({ isOpen, onClose, onSubmit, chamado }: ChamadoFormP
               onChange={(e) => handleChange('descricao', e.target.value)}
               placeholder="Descreva detalhadamente o problema relatado"
               rows={4}
+              className="min-h-[100px] sm:min-h-[120px]"
             />
           </div>
-
-          <div className="flex justify-end gap-3 pt-4">
-            <Button type="button" variant="outline" onClick={onClose}>
-              Cancelar
-            </Button>
-            <Button type="submit">
-              {chamado ? 'Atualizar' : 'Criar'} Chamado
-            </Button>
-          </div>
         </form>
+
+        <div className="flex flex-col sm:flex-row gap-3 pt-4 border-t flex-shrink-0">
+          <Button type="button" variant="outline" onClick={onClose} className="h-10 sm:h-11">
+            Cancelar
+          </Button>
+          <Button type="submit" onClick={handleSubmit} className="h-10 sm:h-11">
+            {chamado ? 'Atualizar' : 'Criar'} Chamado
+          </Button>
+        </div>
       </DialogContent>
     </Dialog>
   );

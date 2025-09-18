@@ -132,19 +132,22 @@ export const Dashboard = () => {
       {/* Header */}
       <header className="bg-card border-b shadow-sm">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex items-center justify-between h-16">
-            <div className="flex items-center gap-3">
-              <div className="w-8 h-8 bg-gradient-to-br from-primary to-primary-glow rounded-lg flex items-center justify-center">
-                <BarChart3 className="w-4 h-4 text-primary-foreground" />
+          <div className="flex items-center justify-between h-14 sm:h-16">
+            <div className="flex items-center gap-2 sm:gap-3">
+              <div className="w-7 h-7 sm:w-8 sm:h-8 bg-gradient-to-br from-primary to-primary-glow rounded-lg flex items-center justify-center">
+                <BarChart3 className="w-3 h-3 sm:w-4 sm:h-4 text-primary-foreground" />
               </div>
-              <div>
-                <h1 className="text-xl font-bold text-foreground">Assistência Técnica</h1>
-                <p className="text-sm text-muted-foreground">Sistema de Controle</p>
+              <div className="hidden sm:block">
+                <h1 className="text-lg sm:text-xl font-bold text-foreground">Assistência Técnica</h1>
+                <p className="text-xs sm:text-sm text-muted-foreground">Sistema de Controle</p>
+              </div>
+              <div className="block sm:hidden">
+                <h1 className="text-sm font-bold text-foreground">Assistência</h1>
               </div>
             </div>
 
-            <div className="flex items-center gap-4">
-              <div className="flex items-center gap-2">
+            <div className="flex items-center gap-2 sm:gap-4">
+              <div className="hidden sm:flex items-center gap-2">
                 <User className="w-4 h-4 text-muted-foreground" />
                 <span className="text-sm font-medium">{user?.nome}</span>
                 <Badge variant={isAdmin ? 'default' : 'secondary'}>
@@ -152,9 +155,16 @@ export const Dashboard = () => {
                 </Badge>
               </div>
               
-              <Button variant="ghost" size="sm" onClick={logout}>
-                <LogOut className="w-4 h-4 mr-2" />
-                Sair
+              <div className="flex sm:hidden items-center gap-1">
+                <User className="w-4 h-4 text-muted-foreground" />
+                <Badge variant={isAdmin ? 'default' : 'secondary'} className="text-xs px-1.5 py-0.5">
+                  {isAdmin ? 'A' : 'V'}
+                </Badge>
+              </div>
+              
+              <Button variant="ghost" size="sm" onClick={logout} className="h-8 sm:h-9 px-2 sm:px-3">
+                <LogOut className="w-4 h-4 sm:mr-2" />
+                <span className="hidden sm:inline">Sair</span>
               </Button>
             </div>
           </div>
@@ -162,57 +172,66 @@ export const Dashboard = () => {
       </header>
 
       {/* Main Content */}
-      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 sm:py-8">
         {/* Actions Bar */}
-        <div className="flex flex-col sm:flex-row gap-4 mb-8">
-          <div className="flex-1">
-            <div className="relative">
-              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-muted-foreground" />
-              <Input
-                placeholder="Buscar por cliente, endereço ou descrição..."
-                value={searchTerm}
-                onChange={(e) => setSearchTerm(e.target.value)}
-                className="pl-10"
-              />
+        <div className="flex flex-col gap-3 sm:gap-4 mb-6 sm:mb-8">
+          <div className="flex gap-2 sm:gap-4">
+            <div className="flex-1">
+              <div className="relative">
+                <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-muted-foreground" />
+                <Input
+                  placeholder="Buscar chamados..."
+                  value={searchTerm}
+                  onChange={(e) => setSearchTerm(e.target.value)}
+                  className="pl-10 h-10 sm:h-11"
+                />
+              </div>
             </div>
+            
+            {isAdmin && (
+              <Button onClick={() => setIsFormOpen(true)} className="shrink-0 h-10 sm:h-11 px-3 sm:px-4">
+                <Plus className="w-4 h-4 sm:mr-2" />
+                <span className="hidden sm:inline">Novo Chamado</span>
+                <span className="sm:hidden">Novo</span>
+              </Button>
+            )}
           </div>
-          
-          {isAdmin && (
-            <Button onClick={() => setIsFormOpen(true)} className="shrink-0">
-              <Plus className="w-4 h-4 mr-2" />
-              Novo Chamado
-            </Button>
-          )}
         </div>
 
         {/* Status Tabs */}
-        <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-6">
-          <TabsList className="grid w-full grid-cols-4">
-            <TabsTrigger value="todos" className="flex items-center gap-2">
-              Todos
-              <Badge variant="secondary" className="text-xs">
-                {getStatusCount('todos')}
-              </Badge>
-            </TabsTrigger>
-            <TabsTrigger value="aberto" className="flex items-center gap-2">
-              Abertos
-              <Badge variant="secondary" className="text-xs">
-                {getStatusCount('aberto')}
-              </Badge>
-            </TabsTrigger>
-            <TabsTrigger value="em_andamento" className="flex items-center gap-2">
-              Em Andamento
-              <Badge variant="secondary" className="text-xs">
-                {getStatusCount('em_andamento')}
-              </Badge>
-            </TabsTrigger>
-            <TabsTrigger value="concluido" className="flex items-center gap-2">
-              Concluídos
-              <Badge variant="secondary" className="text-xs">
-                {getStatusCount('concluido')}
-              </Badge>
-            </TabsTrigger>
-          </TabsList>
+        <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-4 sm:space-y-6">
+          <div className="overflow-x-auto">
+            <TabsList className="grid w-full grid-cols-4 min-w-[320px] h-10 sm:h-11">
+              <TabsTrigger value="todos" className="flex items-center gap-1 sm:gap-2 text-xs sm:text-sm">
+                <span className="hidden sm:inline">Todos</span>
+                <span className="sm:hidden">Todos</span>
+                <Badge variant="secondary" className="text-xs px-1.5 py-0.5">
+                  {getStatusCount('todos')}
+                </Badge>
+              </TabsTrigger>
+              <TabsTrigger value="aberto" className="flex items-center gap-1 sm:gap-2 text-xs sm:text-sm">
+                <span className="hidden sm:inline">Abertos</span>
+                <span className="sm:hidden">Abertos</span>
+                <Badge variant="secondary" className="text-xs px-1.5 py-0.5">
+                  {getStatusCount('aberto')}
+                </Badge>
+              </TabsTrigger>
+              <TabsTrigger value="em_andamento" className="flex items-center gap-1 sm:gap-2 text-xs sm:text-sm">
+                <span className="hidden sm:inline">Em Andamento</span>
+                <span className="sm:hidden">Andamento</span>
+                <Badge variant="secondary" className="text-xs px-1.5 py-0.5">
+                  {getStatusCount('em_andamento')}
+                </Badge>
+              </TabsTrigger>
+              <TabsTrigger value="concluido" className="flex items-center gap-1 sm:gap-2 text-xs sm:text-sm">
+                <span className="hidden sm:inline">Concluídos</span>
+                <span className="sm:hidden">Concluídos</span>
+                <Badge variant="secondary" className="text-xs px-1.5 py-0.5">
+                  {getStatusCount('concluido')}
+                </Badge>
+              </TabsTrigger>
+            </TabsList>
+          </div>
 
           <TabsContent value={activeTab} className="space-y-4">
             {filteredChamados.length === 0 ? (
@@ -228,7 +247,7 @@ export const Dashboard = () => {
                 </p>
               </div>
             ) : (
-              <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+              <div className="grid gap-4 sm:gap-6 grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
                 {filteredChamados.map((chamado) => (
                   <ChamadoCard
                     key={chamado.id}
