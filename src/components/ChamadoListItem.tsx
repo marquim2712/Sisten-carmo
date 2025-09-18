@@ -7,7 +7,10 @@ import {
   User, 
   Edit, 
   Trash2, 
-  CheckCircle
+  CheckCircle,
+  ArrowRight,
+  Clock,
+  Eye
 } from 'lucide-react';
 import { useAuth } from '../contexts/AuthContext';
 
@@ -15,9 +18,11 @@ interface ChamadoListItemProps {
   chamado: Chamado;
   onEdit?: (chamado: Chamado) => void;
   onDelete?: (id: string) => void;
+  onStatusChange?: (id: string, status: Chamado['status']) => void;
+  onViewDetails?: () => void;
 }
 
-export const ChamadoListItem = ({ chamado, onEdit, onDelete }: ChamadoListItemProps) => {
+export const ChamadoListItem = ({ chamado, onEdit, onDelete, onStatusChange, onViewDetails }: ChamadoListItemProps) => {
   const { user } = useAuth();
   const isAdmin = user?.tipo === 'admin';
 
@@ -30,6 +35,28 @@ export const ChamadoListItem = ({ chamado, onEdit, onDelete }: ChamadoListItemPr
     return colorMap[status];
   };
 
+  const getNextStatus = (currentStatus: Chamado['status']): Chamado['status'] | null => {
+    switch (currentStatus) {
+      case 'aberto':
+        return 'em_andamento';
+      case 'em_andamento':
+        return 'concluido';
+      default:
+        return null;
+    }
+  };
+
+  const getStatusIcon = (status: Chamado['status']) => {
+    switch (status) {
+      case 'aberto':
+        return <Clock className="w-4 h-4" />;
+      case 'em_andamento':
+        return <ArrowRight className="w-4 h-4" />;
+      case 'concluido':
+        return <CheckCircle className="w-4 h-4" />;
+    }
+  };
+
   const formatDate = (dateString: string) => {
     return new Date(dateString).toLocaleDateString('pt-BR', {
       day: '2-digit',
@@ -40,12 +67,18 @@ export const ChamadoListItem = ({ chamado, onEdit, onDelete }: ChamadoListItemPr
     });
   };
 
+  const nextStatus = getNextStatus(chamado.status);
+
   return (
     <div className="flex items-center gap-3 p-3 bg-card border rounded-lg hover:bg-muted/50 transition-colors">
       {/* Status Icon */}
       <div className="flex-shrink-0">
-        <div className="w-8 h-8 bg-success-light rounded-full flex items-center justify-center">
-          <CheckCircle className="w-4 h-4 text-success" />
+        <div className={`w-8 h-8 rounded-full flex items-center justify-center ${
+          chamado.status === 'aberto' ? 'bg-info-light' :
+          chamado.status === 'em_andamento' ? 'bg-warning-light' :
+          'bg-success-light'
+        }`}>
+          {getStatusIcon(chamado.status)}
         </div>
       </div>
 
@@ -68,11 +101,39 @@ export const ChamadoListItem = ({ chamado, onEdit, onDelete }: ChamadoListItemPr
       </div>
 
       {/* Date and Actions */}
-      <div className="flex items-center gap-3 flex-shrink-0">
+      <div className="flex items-center gap-2 sm:gap-3 flex-shrink-0">
         <div className="hidden sm:flex items-center gap-1 text-xs text-muted-foreground">
           <Calendar className="w-3 h-3" />
           <span>{formatDate(chamado.criado_em)}</span>
         </div>
+        
+        {/* Status Change Button */}
+        {isAdmin && nextStatus && onStatusChange && (
+          <Button
+            size="sm"
+            variant="outline"
+            onClick={() => onStatusChange(chamado.id, nextStatus)}
+            className="text-xs h-8 px-2 touch-target"
+          >
+            <ArrowRight className="w-3 h-3 mr-1" />
+            <span className="hidden sm:inline">{STATUS_LABELS[nextStatus]}</span>
+            <span className="sm:hidden">
+              {nextStatus === 'em_andamento' ? 'Iniciar' : 'Concluir'}
+            </span>
+          </Button>
+        )}
+        
+        {/* View Details Button for Concluded */}
+        {chamado.status === 'concluido' && onViewDetails && (
+          <Button
+            size="sm"
+            variant="ghost"
+            onClick={onViewDetails}
+            className="h-8 px-2 touch-target"
+          >
+            <Eye className="w-4 h-4" />
+          </Button>
+        )}
         
         {isAdmin && (
           <div className="flex gap-1">

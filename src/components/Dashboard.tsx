@@ -5,6 +5,7 @@ import { Chamado, STATUS_LABELS } from '../types';
 import { ChamadoCard } from './ChamadoCard';
 import { ChamadoListItem } from './ChamadoListItem';
 import { ChamadoForm } from './ChamadoForm';
+import { ChamadoDetails } from './ChamadoDetails';
 import { Button } from './ui/button';
 import { Input } from './ui/input';
 import { Badge } from './ui/badge';
@@ -27,6 +28,7 @@ export const Dashboard = () => {
   const [searchTerm, setSearchTerm] = useState('');
   const [isFormOpen, setIsFormOpen] = useState(false);
   const [editingChamado, setEditingChamado] = useState<Chamado | null>(null);
+  const [viewingChamado, setViewingChamado] = useState<Chamado | null>(null);
   const [activeTab, setActiveTab] = useState('todos');
 
   const isAdmin = user?.tipo === 'admin';
@@ -248,32 +250,18 @@ export const Dashboard = () => {
                 </p>
               </div>
             ) : (
-              <>
-                {activeTab === 'concluido' ? (
-                  <div className="space-y-2">
-                    {filteredChamados.map((chamado) => (
-                      <ChamadoListItem
-                        key={chamado.id}
-                        chamado={chamado}
-                        onEdit={isAdmin ? openEditForm : undefined}
-                        onDelete={isAdmin ? handleDeleteChamado : undefined}
-                      />
-                    ))}
-                  </div>
-                ) : (
-                  <div className="grid gap-3 sm:gap-6 grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
-                    {filteredChamados.map((chamado) => (
-                      <ChamadoCard
-                        key={chamado.id}
-                        chamado={chamado}
-                        onEdit={isAdmin ? openEditForm : undefined}
-                        onDelete={isAdmin ? handleDeleteChamado : undefined}
-                        onStatusChange={isAdmin ? handleStatusChange : undefined}
-                      />
-                    ))}
-                  </div>
-                )}
-              </>
+              <div className="space-y-2">
+                {filteredChamados.map((chamado) => (
+                  <ChamadoListItem
+                    key={chamado.id}
+                    chamado={chamado}
+                    onEdit={isAdmin ? openEditForm : undefined}
+                    onDelete={isAdmin ? handleDeleteChamado : undefined}
+                    onStatusChange={isAdmin ? handleStatusChange : undefined}
+                    onViewDetails={chamado.status === 'concluido' ? () => setViewingChamado(chamado) : undefined}
+                  />
+                ))}
+              </div>
             )}
           </TabsContent>
         </Tabs>
@@ -285,6 +273,13 @@ export const Dashboard = () => {
         onClose={closeForm}
         onSubmit={editingChamado ? handleEditChamado : handleCreateChamado}
         chamado={editingChamado}
+      />
+
+      {/* Details Modal */}
+      <ChamadoDetails
+        chamado={viewingChamado}
+        isOpen={!!viewingChamado}
+        onClose={() => setViewingChamado(null)}
       />
     </div>
   );
