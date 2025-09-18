@@ -83,7 +83,7 @@ export const ChamadoForm = ({ isOpen, onClose, onSubmit, chamado }: ChamadoFormP
               value={formData.cliente_nome}
               onChange={(e) => handleChange('cliente_nome', e.target.value)}
               placeholder="Digite o nome do cliente"
-              className="h-10 sm:h-11"
+              className="h-11 sm:h-11 touch-target"
             />
           </div>
 
@@ -94,7 +94,7 @@ export const ChamadoForm = ({ isOpen, onClose, onSubmit, chamado }: ChamadoFormP
               value={formData.endereco}
               onChange={(e) => handleChange('endereco', e.target.value)}
               placeholder="Digite o endereço completo"
-              className="h-10 sm:h-11"
+              className="h-11 sm:h-11 touch-target"
             />
           </div>
 
@@ -112,10 +112,10 @@ export const ChamadoForm = ({ isOpen, onClose, onSubmit, chamado }: ChamadoFormP
         </form>
 
         <div className="flex flex-col sm:flex-row gap-3 pt-4 border-t flex-shrink-0">
-          <Button type="button" variant="outline" onClick={onClose} className="h-10 sm:h-11">
+          <Button type="button" variant="outline" onClick={onClose} className="h-11 sm:h-11 touch-target">
             Cancelar
           </Button>
-          <Button type="submit" onClick={handleSubmit} className="h-10 sm:h-11">
+          <Button type="submit" onClick={handleSubmit} className="h-11 sm:h-11 touch-target">
             {chamado ? 'Atualizar' : 'Criar'} Chamado
           </Button>
         </div>

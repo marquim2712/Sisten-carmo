@@ -142,6 +142,12 @@
     min-width: 44px;
   }
   
+  /* Better touch feedback */
+  .touch-target:active {
+    transform: scale(0.98);
+    transition: transform 0.1s ease;
+  }
+  
   /* Prevent zoom on input focus (iOS) */
   input[type="text"],
   input[type="email"],
@@ -162,5 +168,23 @@
   
   .safe-area-bottom {
     padding-bottom: env(safe-area-inset-bottom);
+  }
+  
+  /* Better mobile scrolling */
+  .mobile-scroll {
+    -webkit-overflow-scrolling: touch;
+    overscroll-behavior: contain;
+  }
+  
+  /* Improved focus states for mobile */
+  .focus-visible:focus-visible {
+    outline: 2px solid hsl(var(--ring));
+    outline-offset: 2px;
+  }
+  
+  /* Better button states */
+  button:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
   }
 }

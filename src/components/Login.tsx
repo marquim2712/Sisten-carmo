@@ -67,7 +67,7 @@ export const Login = () => {
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 disabled={isLoading}
-                className="h-10 sm:h-11"
+                className="h-11 sm:h-11 touch-target"
               />
             </div>
             
@@ -80,13 +80,13 @@ export const Login = () => {
                 value={senha}
                 onChange={(e) => setSenha(e.target.value)}
                 disabled={isLoading}
-                className="h-10 sm:h-11"
+                className="h-11 sm:h-11 touch-target"
               />
             </div>
             
             <Button 
               type="submit" 
-              className="w-full h-10 sm:h-11" 
+              className="w-full h-11 sm:h-11 touch-target" 
               disabled={isLoading}
             >
               {isLoading ? (

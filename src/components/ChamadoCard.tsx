@@ -93,17 +93,17 @@ export const ChamadoCard = ({ chamado, onEdit, onDelete, onStatusChange }: Chama
                 variant="ghost"
                 size="icon"
                 onClick={() => onEdit?.(chamado)}
-                className="h-7 w-7 sm:h-8 sm:w-8 hover:bg-muted"
+                className="h-8 w-8 sm:h-8 sm:w-8 hover:bg-muted touch-target"
               >
-                <Edit className="w-3 h-3" />
+                <Edit className="w-4 h-4" />
               </Button>
               <Button
                 variant="ghost"
                 size="icon"
                 onClick={() => onDelete?.(chamado.id)}
-                className="h-7 w-7 sm:h-8 sm:w-8 hover:bg-destructive/10 hover:text-destructive"
+                className="h-8 w-8 sm:h-8 sm:w-8 hover:bg-destructive/10 hover:text-destructive touch-target"
               >
-                <Trash2 className="w-3 h-3" />
+                <Trash2 className="w-4 h-4" />
               </Button>
             </div>
           )}
@@ -131,9 +131,9 @@ export const ChamadoCard = ({ chamado, onEdit, onDelete, onStatusChange }: Chama
               size="sm"
               variant="outline"
               onClick={() => onStatusChange(chamado.id, nextStatus)}
-              className="text-xs h-8 w-full sm:w-auto"
+              className="text-xs h-9 w-full sm:w-auto touch-target"
             >
-              <ArrowRight className="w-3 h-3 mr-1" />
+              <ArrowRight className="w-4 h-4 mr-1" />
               <span className="hidden sm:inline">{STATUS_LABELS[nextStatus]}</span>
               <span className="sm:hidden">
                 {nextStatus === 'em_andamento' ? 'Iniciar' : 'Concluir'}
