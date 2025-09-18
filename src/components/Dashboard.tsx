@@ -3,6 +3,7 @@ import { useAuth } from '../contexts/AuthContext';
 import { chamadosService } from '../services/chamadosService';
 import { Chamado, STATUS_LABELS } from '../types';
 import { ChamadoCard } from './ChamadoCard';
+import { ChamadoListItem } from './ChamadoListItem';
 import { ChamadoForm } from './ChamadoForm';
 import { Button } from './ui/button';
 import { Input } from './ui/input';
@@ -247,17 +248,32 @@ export const Dashboard = () => {
                 </p>
               </div>
             ) : (
-              <div className="grid gap-3 sm:gap-6 grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
-                {filteredChamados.map((chamado) => (
-                  <ChamadoCard
-                    key={chamado.id}
-                    chamado={chamado}
-                    onEdit={isAdmin ? openEditForm : undefined}
-                    onDelete={isAdmin ? handleDeleteChamado : undefined}
-                    onStatusChange={isAdmin ? handleStatusChange : undefined}
-                  />
-                ))}
-              </div>
+              <>
+                {activeTab === 'concluido' ? (
+                  <div className="space-y-2">
+                    {filteredChamados.map((chamado) => (
+                      <ChamadoListItem
+                        key={chamado.id}
+                        chamado={chamado}
+                        onEdit={isAdmin ? openEditForm : undefined}
+                        onDelete={isAdmin ? handleDeleteChamado : undefined}
+                      />
+                    ))}
+                  </div>
+                ) : (
+                  <div className="grid gap-3 sm:gap-6 grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
+                    {filteredChamados.map((chamado) => (
+                      <ChamadoCard
+                        key={chamado.id}
+                        chamado={chamado}
+                        onEdit={isAdmin ? openEditForm : undefined}
+                        onDelete={isAdmin ? handleDeleteChamado : undefined}
+                        onStatusChange={isAdmin ? handleStatusChange : undefined}
+                      />
+                    ))}
+                  </div>
+                )}
+              </>
             )}
           </TabsContent>
         </Tabs>
